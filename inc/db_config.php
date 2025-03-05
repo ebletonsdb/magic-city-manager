@@ -1,9 +1,9 @@
 <?php
 
-    $host_name = 'localhost';
-    $user_name = 'root';
-    $pass = '';
-    $db = 'db_mc';
+    $host_name = 'bc9lpdzwgkxyssykfat6-mysql.services.clever-cloud.com';
+    $user_name = 'ueflgqkbwnk9azk9';
+    $pass = 'ouHv15xvswti9VA6tOV6';
+    $db = 'bc9lpdzwgkxyssykfat6';
 
     $con = mysqli_connect($host_name, $user_name, $pass, $db);
 
