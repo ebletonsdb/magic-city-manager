@@ -53,13 +53,20 @@
                 $dob = htmlspecialchars($row['dob'], ENT_QUOTES, 'UTF-8'); 
                 $date = date("Y-m-d", strtotime($row["datetime"]));
                 
-                $del_btn ="<button type='button' onclick='remove_client($id)' class='btn btn-sm btn-danger'>
-                    <i class='bi bi-trash '></i>
-                </button>";
+                $del_btn = '';
+                $modify_btn = '';
+
+                if($_SESSION['type'] == "utilisateur"){
+					$del_btn .= '';
+				}else{
+                    $del_btn .="<button type='button' onclick='remove_client($id)' class='btn btn-sm btn-danger'>
+                        <i class='bi bi-trash '></i>
+                    </button>";
  
-                $modify_btn = "<button type='button' onclick='edit_clients($id)' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#edit_clients'>
-                    <i class='bi bi-pencil-square '></i>
-                </button>";
+                    $modify_btn .= "<button type='button' onclick='edit_clients($id)' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#edit_clients'>
+                        <i class='bi bi-pencil-square '></i>
+                    </button>";
+                }
 
                 $data .="
                     <tr class='align-middle'>

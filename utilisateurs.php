@@ -67,27 +67,26 @@
 					<span class="text">Packages</span>
 				</a>
 			</li>
-			<!-- <li>
-				<a href="#">
-					<i class='bx bx-spreadsheet' ></i>
-					<span class="text">Rapports</span>
-				</a>
-			</li> -->
-			<li class="active">
-				<a href="utilisateurs.php">
-					<i class='bx bxs-group' ></i>
-					<span class="text">Utilisateurs</span>
-				</a>
-			</li>
-		</ul>
-		<!-- <ul class="side-menu">
-			<li>
-				<a href="deconnecter.php" class="logout">
-					<i class='bx bxs-log-out-circle'></i>
-					<span class="text">Deconnecter</span>
-				</a>
-			</li>
-		</ul> -->
+			<?php
+				if($_SESSION['type'] == "utilisateur"){
+					echo "";
+				}else{
+					echo "
+					<li>
+						<a href='rapports.php'>
+							<i class='bx bx-spreadsheet' ></i>
+							<span class='text'>Rapports</span>
+						</a>
+					</li>
+					
+					<li class='active'>
+						<a href='utilisateurs.php'>
+							<i class='bx bxs-group' ></i>
+							<span class='text'>Utilisateurs</span>
+						</a>
+					</li>";
+				}
+			?>
 	</section>
 	<!-- SIDEBAR -->
 

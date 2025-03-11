@@ -68,17 +68,19 @@
 					<span class="text">Packages</span>
 				</a>
 			</li>
-			<!-- <li>
-				<a href="#">
-					<i class='bx bx-spreadsheet' ></i>
-					<span class="text">Rapports</span>
-				</a>
-			</li> -->
 			<?php
 				if($_SESSION['type'] == "utilisateur"){
 					echo "";
 				}else{
-					echo "<li>
+					echo "
+					<li>
+						<a href='rapports.php'>
+							<i class='bx bx-spreadsheet' ></i>
+							<span class='text'>Rapports</span>
+						</a>
+					</li>
+					
+					<li>
 						<a href='utilisateurs.php'>
 							<i class='bx bxs-group' ></i>
 							<span class='text'>Utilisateurs</span>
@@ -87,14 +89,6 @@
 				}
 			?>
 		</ul>
-		<!-- <ul class="side-menu">
-			<li>
-				<a href="deconnecter.php" class="logout">
-					<i class='bx bxs-log-out-circle'></i>
-					<span class="text">Deconnecter</span>
-				</a>
-			</li>
-		</ul> -->
 	</section>
 	<!-- SIDEBAR -->
 
@@ -145,34 +139,8 @@
         			FROM `reservations`"));
 					$datenow = date("Y-m-d");
 
-					// $count_atente = mysqli_fetch_assoc(mysqli_query($con,"SELECT 
-					// 	COUNT(CASE WHEN statut = 'En attente' THEN 1 END) AS count_attente 
-					// FROM reservations"));
 					$count_atente = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) AS count_atente FROM reservations WHERE date_r >= '$datenow' AND balance > 0"))['count_atente'];
-
-
-					// $query = "SELECT COUNT(*) AS count_terminer 
-					// FROM reservations 
-					// WHERE(date_r < ? AND balance = 0)";
-
-					// $stmt = $con->prepare($query);
-					// $stmt->bind_param("s", $datenow);
-					// $stmt->execute();
-					// $result = $stmt->get_result();
-					// $row = $result->fetch_assoc();
-					// $count_terminer = $row['count_terminer'];
 					$count_terminer = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) AS count_terminer FROM reservations WHERE date_r < '$datenow' AND balance = 0"))['count_terminer'];
-
-					// $query2 = "SELECT COUNT(*) AS count_encours 
-					// FROM reservations 
-					// WHERE (date_r = ? AND balance = 0)";
-
-					// $stmt2 = $con->prepare($query2);
-					// $stmt2->bind_param("s", $datenow);
-					// $stmt2->execute();
-					// $result2 = $stmt2->get_result();
-					// $row2 = $result2->fetch_assoc();
-					// $count_encours = $row2['count_encours'];
 					$count_encours = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) AS count_encours FROM reservations WHERE date_r = '$datenow' AND balance = 0"))['count_encours'];
 				?>
 				<li>
@@ -263,7 +231,7 @@
 								<select required id="select-search" name="nomclient" class="selectpicker form-select form-control shadow-none" data-live-search="true">
 									<option value="" disabled selected>Choisir le nom ici</option>
 									<?php
-										$res = selectAll('clients');
+										$res = mysqli_query($con, "SELECT * FROM clients ORDER BY id DESC");
 										while($opt = mysqli_fetch_assoc($res)){
 											echo"
 												<option value='$opt[nom]'>$opt[nom]</option>
@@ -277,7 +245,7 @@
 								<select required id="select-search" name="package" class="selectpicker form-select form-control shadow-none" data-live-search="true">
 									<option value="" disabled selected>Choisir le package ici</option>
 									<?php
-										$res = selectAll('packages');
+										$res = mysqli_query($con, "SELECT * FROM packages ORDER BY id DESC");
 										while($opt = mysqli_fetch_assoc($res)){
 											echo"
 												<option value='$opt[nom]' data-prix='$opt[prix]'>$opt[nom]</option>
@@ -359,7 +327,7 @@
 							</div>
 								<?php
 									if($_SESSION["type"] == "utilisateur"){
-										echo "<div class='col-md-6 mt-4'>
+										echo "<div class='col-md-12'>
 											<label class='form-label fw-bold text-danger'>Vous pouvez modifier seulement le versement</label>
 										</div>";
 									}else{
@@ -381,7 +349,7 @@
 
 
 	<script src="js/scripts.js"></script>
-	<script src="scripts/reservations.js"></script>
+	<script src="scripts/reservationss.js"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -392,6 +360,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap Select JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
+	<!-- generer PDF -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -404,6 +374,7 @@
                 $('#montant').val(selectedPrice ? parseFloat(selectedPrice).toFixed(2) : '');
             });
         });
+
     </script>
 </body>
 

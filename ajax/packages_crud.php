@@ -176,15 +176,19 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><hr>
-                        <div class='d-flex justify-content-center'>
-                            <button type='button' onclick='edit_package($id)' class='btn btn-primary shadow-none btn-sm m-1' data-bs-toggle='modal' data-bs-target='#edit_package'>
-                                Moddifier
-                            </button>
-                            <button type='button' onclick='remove_package($id)' class='btn btn-danger shadow-none btn-sm m-1'>
-                                Supprimer
-                            </button>
-                        </div>
+                        </div>";
+                            if($_SESSION['type'] == 'utilisateur'){
+
+                            }else{
+                                echo "<hr><div class='d-flex justify-content-center'>
+                                <button type='button' onclick='edit_package($id)' class='btn btn-primary shadow-none btn-sm m-1' data-bs-toggle='modal' data-bs-target='#edit_package'>
+                                    Moddifier
+                                </button>
+                                <button type='button' onclick='remove_package($id)' class='btn btn-danger shadow-none btn-sm m-1'>
+                                    Supprimer
+                                </button>";
+                            }
+                        echo"</div>
                     </div>
                 </div>
                 ";

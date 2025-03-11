@@ -7,13 +7,13 @@
 }
 
 a {
+	
 	text-decoration: none;
 }
 
 li {
 	list-style: none;
 }
-
 :root {
 	--poppins: 'Poppins', sans-serif;
 	--lato: 'Lato', sans-serif;

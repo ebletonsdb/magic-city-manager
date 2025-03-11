@@ -115,7 +115,7 @@
 
     if(isset($_POST['get_all_utilisateurs'])){
         $frm_data = filteration($_POST);
-        $query = "SELECT * FROM `utilisateurs` WHERE (type LIKE ? OR nom LIKE ? OR addresse LIKE ? OR phone LIKE ? OR email LIKE ? OR `type` LIKE ?) ORDER BY id ASC";
+        $query = "SELECT * FROM `utilisateurs` WHERE (type LIKE ? OR nom LIKE ? OR addresse LIKE ? OR phone LIKE ? OR email LIKE ? OR `type` LIKE ?) ORDER BY id DESC";
         $values = ["%$frm_data[search]%", "%$frm_data[search]%", "%$frm_data[search]%", "%$frm_data[search]%", "%$frm_data[search]%", "%$frm_data[search]%"];
         $res = select($query, $values, 'ssssss');
         $i = 1;

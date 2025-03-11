@@ -160,8 +160,8 @@
         echo $data;
     }
 
-        // edit plat
-        if(isset($_POST["edit_boissons"])){
+    // edit plat
+    if(isset($_POST["edit_boissons"])){
         $frm_data = filteration($_POST);
 
         $q = "UPDATE `boissons` SET `nom`=?,`prix`=? WHERE `id`=?";

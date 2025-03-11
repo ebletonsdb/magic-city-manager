@@ -48,27 +48,6 @@ function get_all_reservations(search=''){
     xhr.send('get_all_reservations&search='+search);
 }
 
-// function edit_details_reservations(id){
-//     let xhr = new XMLHttpRequest();
-//     xhr.open("GET", "ajax/reservations_crud.php", true);
-//     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-//     xhr.onload = function() {
-//         let data = JSON.parse(this.responseText);
-//         if (data.reservationsdata) {
-//             edit_reservations_form.elements['nomClient'].value = data.reservationsdata.client;
-//             edit_reservations_form.elements['package'].value = data.reservationsdata.package;
-//             edit_reservations_form.elements['date_r'].value = data.reservationsdata.date_r;
-//             edit_reservations_form.elements['heure_r'].value = data.reservationsdata.heure_r;
-//             edit_reservations_form.elements['versement'].value = data.reservationsdata.versement;
-//             edit_reservations_form.elements['reservation_id'].value = data.reservationsdata.id;
-//         } else {
-//             console.error("les donnees ne sont pas disponibles");
-//         }
-//     }
-//     xhr.send('get_reservations='+id);
-// }
-
 function edit_reservations(id){
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "ajax/reservations_crud.php", true);
@@ -145,6 +124,44 @@ function remove_reservations(reservations_id){
             }
         }
         xhr.send(data);
+    }
+}
+
+function print_reservations(id) {
+    if(confirm("Voulez-vous vraiment générer le PDF pour cette réservation ?")){
+        let formData = new FormData();
+        formData.append("id", id);
+        formData.append('print_reservations', '');
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "ajax/reservations_crud.php", true);
+        xhr.responseType = "blob"; 
+        
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                let contentDisposition = xhr.getResponseHeader('Content-Disposition');
+                let filename = "reservation_";
+                let clientName = contentDisposition.match(/filename="([^"]+)"/);
+                if (clientName && clientName[1]) {
+                    filename += clientName[1];
+                }
+                filename += ".pdf";
+
+                let blob = xhr.response;
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                alert('success', 'PDF généré avec succès!');
+                get_all_reservations();
+            } else {
+                alert("Erreur lors de la génération du PDF !");
+            }
+        };
+        xhr.send(formData);
     }
 }
 

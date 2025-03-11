@@ -41,10 +41,7 @@
 			DAYOFYEAR(DATE_ADD(CURDATE(), INTERVAL 2 DAY)), 
 			DAYOFYEAR(DATE_ADD(CURDATE(), INTERVAL 3 DAY))
 		)"));
-
-		// $count_dob = mysqli_fetch_assoc(mysqli_query($con,"SELECT COUNT(id) AS `count` 
-        // FROM `clients` WHERE DATE_FORMAT(dob, '%m-%d') = DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 3 DAY), '%m-%d')"));
-
+		
 		$reservations = mysqli_query($con,"SELECT * FROM `reservations` ORDER BY id DESC limit 10");
 
 	?>
@@ -92,17 +89,19 @@
 					<span class="text">Packages</span>
 				</a>
 			</li>
-			<!-- <li>
-				<a href="#">
-					<i class='bx bx-spreadsheet' ></i>
-					<span class="text">Rapports</span>
-				</a>
-			</li> -->
 			<?php
 				if($_SESSION['type'] == "utilisateur"){
 					echo "";
 				}else{
-					echo "<li>
+					echo "
+					<li>
+						<a href='rapports.php'>
+							<i class='bx bx-spreadsheet' ></i>
+							<span class='text'>Rapports</span>
+						</a>
+					</li>
+					
+					<li>
 						<a href='utilisateurs.php'>
 							<i class='bx bxs-group' ></i>
 							<span class='text'>Utilisateurs</span>

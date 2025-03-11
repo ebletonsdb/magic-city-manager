@@ -92,17 +92,19 @@
 					<span class="text">Packages</span>
 				</a>
 			</li>
-			<!-- <li>
-				<a href="#">
-					<i class='bx bx-spreadsheet' ></i>
-					<span class="text">Rapports</span>
-				</a>
-			</li> -->
 			<?php
 				if($_SESSION['type'] == "utilisateur"){
 					echo "";
 				}else{
-					echo "<li>
+					echo "
+					<li>
+						<a href='rapports.php'>
+							<i class='bx bx-spreadsheet' ></i>
+							<span class='text'>Rapports</span>
+						</a>
+					</li>
+					
+					<li>
 						<a href='utilisateurs.php'>
 							<i class='bx bxs-group' ></i>
 							<span class='text'>Utilisateurs</span>
@@ -111,14 +113,6 @@
 				}
 			?>
 		</ul>
-		<!-- <ul class="side-menu">
-			<li>
-				<a href="deconnecter.php" class="logout">
-					<i class='bx bxs-log-out-circle'></i>
-					<span class="text">Deconnecter</span>
-				</a>
-			</li>
-		</ul> -->
 	</section>
 	<!-- SIDEBAR -->
 
@@ -165,38 +159,16 @@
 				</div>
 			</div>
 
-			<ul class="box-info">
+			<ul class="box-info d-flex">
 				<?php
 					$count = mysqli_fetch_assoc(mysqli_query($con,"SELECT COUNT(id) AS `count` 
         			FROM `packages`"));
-
-					// $count_atente = mysqli_fetch_assoc(mysqli_query($con,"SELECT 
-					// 	COUNT(CASE WHEN statut = 'En attente' THEN 1 END) AS count_attente 
-					// FROM reservations"));
-
-					// $count_terminer = mysqli_fetch_assoc(mysqli_query($con,"SELECT 
-					// 	COUNT(CASE WHEN statut = 'Terminer' THEN 1 END) AS count_terminer 
-					// FROM reservations"));
 				?>
 				<li>
 					<i class='bx bx-package'></i>
 					<span class="text">
 						<h3><?= $count['count'] ?></h3>
 						<p>Packages</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bx-time-five'></i>
-					<span class="text">
-						<h3>1</h3>
-						<p>En attente</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bx-check-circle'></i>
-					<span class="text">
-						<h3>2</h3>
-						<p>Terminer</p>
 					</span>
 				</li>
 			</ul>
@@ -234,38 +206,41 @@
 						<h5 class="modal-title">ID (#<?php echo "P-".$id; ?>)</h5>
 					</div>
 					<div class="modal-body">
-						<div class="row">
-							
+						<input type="text" oninput="get_all_plats_boissons(this.value)" class="form-control shadow-none  ms-auto" placeholder="Rechercher plat et boissons ici..."><br>
+						<p id="no_result" class="text-danger text-center fw-bold" style="display: none;">Aucun résultat trouvé</p>
+
+						<div class="row" id="plats_container">
 							<div class="col-12 mb-3">
-                                    <h3 class="form-label fw-bold">Plats</h3>
-                                    <div class="row">
-                                        <?php
-                                            $res = selectAll('plats');
-                                            while($opt = mysqli_fetch_assoc($res)){
-                                                echo"
-                                                    <div class='col-md-4 mb-1'>
-                                                        <label>
-                                                            <input type='checkbox' name='id_plats' value='$opt[id]' class='form-check-input shadow-none'>
-                                                            <input type='number' name='prix_plats' value='$opt[prix]' hidden>
-                                                            $opt[nom] -> $opt[prix]gdes
-                                                        </label>
-                                                    </div>
-                                                ";
-                                            }
-                                        ?>
-                                    </div>
-                                </div>
-                            <div class="col-12 mb-3">
+								<h3 class="form-label fw-bold">Plats</h3>
+								<div class="row">
+									<?php
+										$res = selectAll('plats');
+										while($opt = mysqli_fetch_assoc($res)){
+											echo"
+												<div class='col-md-4 mb-1 item'>
+													<label>
+														<input type='checkbox' name='id_plats' value='$opt[id]' class='form-check-input shadow-none'>
+														<input type='number' name='prix_plats' value='$opt[prix]' hidden>
+														$opt[nom] -> $opt[prix]gdes
+													</label>
+												</div>
+											";
+										}
+									?>
+								</div>
+							</div>
+
+							<div class="col-12 mb-3">
 								<h3 class="form-label fw-bold">Boissons</h3>
 								<div class="row">
 									<?php
 										$res = selectAll('boissons');
 										while($opt = mysqli_fetch_assoc($res)){
 											echo"
-												<div class='col-md-4 mb-1'>
+												<div class='col-md-4 mb-1 item'>
 													<label>
 														<input type='checkbox' name='id_boissons' value='$opt[id]' class='form-check-input shadow-none'>
-                                                        <input type='number' name='prix_boissons' value='$opt[prix]' hidden>
+														<input type='number' name='prix_boissons' value='$opt[prix]' hidden>
 														$opt[nom] -> $opt[prix]gdes
 													</label>
 												</div>
@@ -275,6 +250,7 @@
 								</div>
 							</div>
 						</div>
+
 						<input type="hidden" name="nom" value="<?=$id?>">
 					</div>
 					<div class="modal-footer">
@@ -461,9 +437,26 @@
 		crossorigin="anonymous">
 	</script>
 	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-	<script>
 
-		
+	<script>
+		function get_all_plats_boissons(value) {
+			let searchText = value.toLowerCase().trim();
+			let items = document.querySelectorAll('.item');
+			let noResult = document.getElementById("no_result");
+			let found = false;
+
+			items.forEach(item => {
+				let text = item.innerText.toLowerCase();
+				if (text.includes(searchText)) {
+					item.style.display = "block"; 
+					found = true;
+				} else {
+					item.style.display = "none"; 
+				}
+			});
+
+			noResult.style.display = found ? "none" : "block";
+		}
 	</script>
 
 </body>
