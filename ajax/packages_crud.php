@@ -80,7 +80,7 @@
                 $id = htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8'); 
                 $nom = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8'); 
                 $prix = htmlspecialchars($row['prix'], ENT_QUOTES, 'UTF-8'); 
-                $datetime = date("Y-m-d H:m:s", strtotime($row["datetime"]));
+                $datetime = date("Y-m-d g:i:s A", strtotime($row["datetime"]));
 
                 $res2 = select("SELECT pl.id, pl.nom, pl.prix, pp.qte_plats FROM plats pl JOIN packages_plats pp ON pl.id = pp.id_plats JOIN packages p ON pp.id_packages = p.id WHERE p.id=?", [$id], 'i');
                 $res3 = select("SELECT bo.id, bo.nom, bo.prix, pb.qte_boissons FROM boissons bo JOIN packages_boissons pb ON bo.id = pb.id_boissons JOIN packages p ON pb.id_packages = p.id WHERE p.id=?", [$id], 'i');

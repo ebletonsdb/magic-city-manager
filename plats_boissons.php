@@ -97,6 +97,12 @@
 							<i class='bx bxs-group' ></i>
 							<span class='text'>Utilisateurs</span>
 						</a>
+					</li>
+					<li>
+						<a href='session_utilisateurs.php'>
+							<i class='bx bxs-time-five' ></i>
+							<span class='text'>Journal des Connexions</span>
+						</a>
 					</li>";
 				}
 			?>
@@ -111,7 +117,8 @@
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu' ></i>
-			<form action="#">
+			<form action="#" class="d-flex justify-content-center">
+				<span id="current-time" class="time"></span>
 			</form>
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
@@ -344,7 +351,7 @@
 	</div>
 
 	<script src="js/scripts.js"></script>
-	<script src="scripts/plats_boissons.js"></script>
+	<script src="scripts/plats_boissonss.js"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

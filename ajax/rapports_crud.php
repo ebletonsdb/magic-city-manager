@@ -64,9 +64,9 @@
             while($row = mysqli_fetch_assoc($res)){
 
                 $id = htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8'); 
-                $date_debut = date("d-m-Y", strtotime($row["date_debut"])); 
-                $date_fin = date("d-m-Y", strtotime($row["date_fin"])); 
-                $date = date("d-m-Y", strtotime($row["datetime"]));
+                $date_debut = date("Y-m-d", strtotime($row["date_debut"])); 
+                $date_fin = date("Y-m-d", strtotime($row["date_fin"])); 
+                $date = date("Y-m-d g:i:s A", strtotime($row["datetime"]));
                 
                 $del_btn ="<button type='button' onclick='remove_rapports($id)' class='btn btn-sm btn-danger'>
                     <i class='bi bi-trash fs-6'></i>
@@ -134,9 +134,9 @@
         <p>Commence le : <b>" . date("d-m-Y", strtotime($date_debut)) . "</b></p>
         <p>Finir le : <b>" . date("d-m-Y", strtotime($date_fin)) . "</b></p><br>
     
-        <table border='1' cellspacing='0' cellpadding='8' width='100%'>
+        <table cellspacing='0' cellpadding='8' width='100%'>
             <thead>
-                <tr class='table1'>
+                <tr style='border-bottom:1px solid silver'>
                     <th>#</th>
                     <th>Client</th>
                     <th>Package</th>
@@ -178,10 +178,10 @@
         }
     
         $html .= "</tbody></table>";
-        $html .= "<h4 style='text-align: center; margin-bottom: 10px;'>Bilan des transactions du rapport</h4>";
+        $html .= "<h4 style='text-align: center; padding: 10px;border:1px solid silver;'>Bilan des transactions du rapport</h4>";
         $html .= "<table border='1' cellspacing='0' cellpadding='8' width='100%'>
             <thead>
-                <tr class='bg-dark'>
+                <tr>
                     <th>MONTANT TOTAL</th>
                     <th>VERSEMENT TOTAL</th>
                     <th>BALANCE TOTALE</th>
@@ -197,7 +197,7 @@
                 $balance += $reservation['balance'];
             }
                 
-            $html .= "<tr>
+            $html .= "<tr style='text-align: center;'>
                 <td>$montant gdes</td>
                 <td>$versement gdes</td>
                 <td>$balance gdes</td>
@@ -205,7 +205,7 @@
             </tbody></table>";
            
 
-        $html .= "<p style='text-align: right; margin-top: 50px;'>Signature autorisée <br> <b>Magik Grill & BBQ</b></p>";
+        $html .= "<p style='text-align: right; margin-top: 50px;'>Signature autorisée <br> <b>Magic City Fun Park</b></p>";
     
         // Charger le HTML et générer le PDF
         $dompdf->loadHtml($html);

@@ -2,7 +2,7 @@
 
     require('../inc/db_config.php');
     require('../inc/essentials.php');
-    // adminLogin(); 
+    adminLogin(); 
 
     // Plats
 
@@ -32,18 +32,19 @@
 
         if($res && mysqli_num_rows($res) > 0){
             while($row = mysqli_fetch_assoc($res)){
-                $nom = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8'); 
+                $nom = ucwords(htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8')); 
                 $prix = htmlspecialchars($row['prix'], ENT_QUOTES, 'UTF-8'); 
+                $id = htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8');
                 echo <<<data
                     <tr>
                         <td>$i</td>
                         <td>$nom</td>
                         <td>$prix gdes</td>
                         <td>
-                            <button type="button" onclick="remove_plats($row[id])" class="btn btn-danger btn-sm shadow-none">
+                            <button type="button" onclick="remove_plats($id)" class="btn btn-danger btn-sm shadow-none">
                                 <i class="bi bi-trash"></i>
                             </button>
-                            <button type='button' onclick='edit_plats($row[id])' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#edit_plats'>
+                            <button type='button' onclick='edit_plats($id)' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#edit_plats'>
                                 <i class='bi bi-pencil-square '></i>
                             </button>
                         </td>
@@ -80,16 +81,15 @@
         echo $res;
     }
 
-    if (isset($_POST['remove_plats'])) {
+    if (isset($_POST['remove_plat'])) {
         $frm_data = filteration($_POST);
-        $values = [$frm_data['remove_plats']];
     
-        $check_q = select('SELECT * FROM `packages_plats` WHERE `id_plats`=?', [$values], 'i');
+        $check_q = select('SELECT * FROM `packages_plats` WHERE `id_plats`=?', [$frm_data['id']], 'i');
 
         if(mysqli_num_rows($check_q) == 0){
             $q = "DELETE FROM `plats` WHERE `id` = ?";
-            $res = deleteR($q, $values, "i");
-            echo $res; 
+            $res = deleteR($q, [$frm_data['id']], "i");
+            echo $res ? "1" : "0";
         }else{
             echo "package_added";
         }
@@ -122,7 +122,7 @@
 
         if($res && mysqli_num_rows($res) > 0){
             while($row = mysqli_fetch_assoc($res)){
-                $nom = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8'); 
+                $nom = ucwords(htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8')); 
                 $prix = htmlspecialchars($row['prix'], ENT_QUOTES, 'UTF-8'); 
                 echo <<<data
                     <tr>

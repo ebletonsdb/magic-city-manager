@@ -122,7 +122,7 @@ function remove_client(client_id){
         xhr.onload = function() {
             if(this.responseText == 1){
                 alert('success', 'Client supprimer!');
-                get_clients();
+                get_all_clients();
             }else{
                 alert('error', 'Erreur de suppression!');
             }

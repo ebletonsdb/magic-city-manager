@@ -106,6 +106,12 @@
 							<i class='bx bxs-group' ></i>
 							<span class='text'>Utilisateurs</span>
 						</a>
+					</li>
+					<li>
+						<a href='session_utilisateurs.php'>
+							<i class='bx bxs-time-five' ></i>
+							<span class='text'>Journal des Connexions</span>
+						</a>
 					</li>";
 				}
 			?>
@@ -120,7 +126,8 @@
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu' ></i>
-			<form action="#">
+			<form action="#" class="d-flex justify-content-center">
+				<span id="current-time" class="time"></span>
 			</form>
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>

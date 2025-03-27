@@ -1,98 +1,169 @@
 <?php
 
-    require('../inc/essentials.php');
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
     require('../inc/db_config.php');
-    require '../inc/vendor/autoload.php';
-    use Dompdf\Dompdf;
-    use Dompdf\Options;
+    require('../inc/essentials.php');
+    require(__DIR__ . '/../inc/vendor/autoload.php');
+
+    use Spipu\Html2Pdf\Html2Pdf;
+
     adminLogin();
 
-    // Configuration de Dompdf
-    $options = new Options();
-    $options->set('defaultFont', 'Arial');
-    $dompdf = new Dompdf($options);
+if (isset($_POST['print_reservations'])) {
+    $frm_data = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $id = mysqli_real_escape_string($con, $frm_data['id']);
 
-// Vérifier si les données sont envoyées
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $id = $_POST["id"];
-//     $date_now = date("d/m/Y");
+    $query1 = "SELECT * FROM `reservations` WHERE id = '$id'";
+    $reservations = mysqli_fetch_assoc(mysqli_query($con, $query1));
 
-    // Exemple de données (remplace avec celles de ta base de données)
-    // $items = [
-    //     ["quantite" => 1, "description" => "Pizza medium (Poulet)", "prix" => 1650, "montant" => 1650],
-    //     ["quantite" => 1, "description" => "Pizza large (Poulet)", "prix" => 2050, "montant" => 2050],
-    //     ["quantite" => 10, "description" => "Brochette de bœuf", "prix" => 1000, "montant" => 10000],
-    //     ["quantite" => 10, "description" => "Wings", "prix" => 1000, "montant" => 10000],
-    //     ["quantite" => 1, "description" => "Champagne JP Chenet", "prix" => 4500, "montant" => 4500],
-    //     ["quantite" => 1, "description" => "Vin rouge", "prix" => 4000, "montant" => 4000],
-    //     ["quantite" => 10, "description" => "Jus naturel", "prix" => 300, "montant" => 3000],
-    //     ["quantite" => 10, "description" => "7 UP", "prix" => 200, "montant" => 2000],
-    //     ["quantite" => 1, "description" => "Frais de réservation", "prix" => 10000, "montant" => 10000]
-    // ];
+    $query2 = "SELECT id, qte_pers FROM `packages` WHERE nom = {$reservations['package']}";
+    $packages = mysqli_fetch_assoc(mysqli_query($con, $query2));
+    $id_package = $packages['id'];
 
-    // $total = array_sum(array_column($items, "montant"));
+    $query3 = "SELECT * FROM `clients` WHERE nom = '$reservations[client]'";
+    $clients = mysqli_fetch_assoc(mysqli_query($con, $query3));
 
-    // Contenu HTML du PDF
-    // $html = "
-    // <h2 style='text-align: center;'>MAGIK GRILL & BBQ</h2>
-    // <p style='text-align: center;'>Adresse : Rue 28 Carénage & Boulevard</p>
-    // <p style='text-align: center;'>magiccityfunparkcap@gmail.com | Tél : +509 4607-8690</p>
-    
-    // <h3 style='text-align: center;'>FACTURE</h3>
-    // <p>Date : $date_now</p>
-    // <p>Nom du Client : <b>Ebsonde Norcilien</b></p>
-    // <p>Téléphone : <b>44935205</b></p>
+    $package_plats = select("SELECT pp.qte_plats, pl.id, pl.nom, pl.prix FROM packages_plats pp JOIN plats pl ON pp.id_plats = pl.id JOIN packages p ON pp.id_packages = p.id WHERE p.id=?", [$id_package], 'i');
+    $package_boissons = select("SELECT pb.qte_boissons, bo.id, bo.nom, bo.prix FROM packages_boissons pb JOIN boissons bo ON pb.id_boissons = bo.id JOIN packages p ON pb.id_packages = p.id WHERE p.id=?", [$id_package], 'i');
 
-    // <table border='1' cellspacing='0' cellpadding='8' width='100%'>
-    //     <thead>
-    //         <tr>
-    //             <th>Quantité</th>
-    //             <th>Description</th>
-    //             <th>Prix Unitaire (Gdes)</th>
-    //             <th>Montant (Gdes)</th>
-    //         </tr>
-    //     </thead>
-    //     <tbody>";
+    ob_start();
+    ?>
 
-    // foreach ($items as $item) {
-    //     $html .= "<tr>
-    //         <td>{$item['quantite']}</td>
-    //         <td>{$item['description']}</td>
-    //         <td>{$item['prix']}</td>
-    //         <td>{$item['montant']}</td>
-    //     </tr>";
-    // }
+    <style>
+        .tab-one {
+            width: 100%;
+            border-collapse: collapse;
+            /* font-size: 12px; */
+        }
+        .tab-one tr{
+            font-size: 16px;
+        }
+        .tab-one th, .tab-one td {
+            width: 25%;
+            border: none;
+            padding: 10px;
+            text-align: center;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header .img{
+            width: 250px;
+            margin-bottom: -30px;
+        }
+        .header p{
+            font-size: 18px;
+        }
+        .signature {
+            text-align: right;
+            margin-top: 50px;
+        }
+        .ligne, hr{
+            width: 100%;
+            height: 1px;
+            border-bottom: 1px solid silver;
+        }
+        .position{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding-left: 430px;
+        }
+        .tab {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tab th, .tab td {
+            border: 1px solid silver;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
 
-    // $html .= "</tbody>
-    // </table>
-    // <p style='text-align: right;'><b>Total en gourdes : $total</b></p>
-    // <p style='text-align: right;'><b>Versement : $total</b></p>
-    // <p style='text-align: right;'><b>Balance : 0</b></p>
+    <div class="header">
+        <img src="../img/logo_magic.png" class="img">
+        <p>Adresse : Rue 28 Carénage & Boulevard<br>magiccityfunparkcap@gmail.com<br>Tél : +509 4607-8690</p>
+        <hr>
+        <h3>FACTURE REÇUS</h3>
+    </div>
 
-    // <h4>Nombre de personnes : 20</h4>
-    // <p>Date événement : 27/Février/2025</p>
-    // <p>Heure de début : 4h00 | Heure de fin : 7h00</p>
+    <p>Date : <b><?=$reservations['datetime']?></b></p>
+    <p>Nom du Client : <b><?=$reservations['client']?></b></p>
+    <p>Téléphone : <b><?=$clients ['phone']?></b></p><br>
+    <br><div class="ligne"></div>
 
-    // <p style='text-align: right; margin-top: 50px;'>Signature autorisée</p>
-    // <p style='text-align: right;'><b>Directrice Magik Grill</b></p>
-    // ";
+    <table class="tab-one">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Quantité</th>
+                <th>Prix Unitaire (Gdes)</th>
+                <th>Montant (Gdes)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($package_plats as $plats){
+                $total_plats = $plats['prix']*$plats['qte_plats'];
+            ?>
+                <tr>
+                    <td><?= $plats['nom'] ?></td>
+                    <td><?= $plats['qte_plats'] ?></td>
+                    <td><?= $plats['prix'] ?></td>
+                    <td><?= $total_plats ?></td>
+                </tr>
+            <?php }
+                foreach($package_boissons as $boissons){
+                $total_boissons = $boissons['prix']*$boissons['qte_boissons'];
+            ?>
+                    <tr>
+                        <td><?= $boissons['nom'] ?></td>
+                        <td><?= $boissons['qte_boissons'] ?></td>
+                        <td><?= $boissons['prix'] ?></td>
+                        <td><?= $total_boissons ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    <br><div class="ligne"></div>
 
-    $html = "<h1>Votre contenu HTML ici</h1>";
+    <div class="position">
+        <table class="tab">
+            <thead>
+                <tr>
+                    <th>TOTAL</th>
+                    <th>VERSEMENT</th>
+                    <th>BALANCE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><?= number_format($reservations['montant'], 2) ?> gdes</td>
+                    <td><?= number_format($reservations['versement'], 2) ?> gdes</td>
+                    <td><?= number_format($reservations['balance'], 2) ?> gdes</td>
+                </tr>
+            </tbody>
+        </table>
+    </div><br>
+    <p class="signature">Signature autorisée <br> <b>Magic City Fun Park</b></p>
 
-    // Charger le HTML et générer le PDF
-    $dompdf->loadHtml($html);
-    $dompdf->setPaper('A4', 'portrait');
-    $dompdf->render();
+    <?php
+    $html = ob_get_clean();
 
-    // Créer le PDF dans une variable sans l'enregistrer sur le serveur
-    $pdfOutput = $dompdf->output();
+    try {
+        $html2pdf = new Html2Pdf();
+        $html2pdf->writeHTML($html);
+        $fileName = "Reservation_$reservations[client].pdf";
+        $html2pdf->output($fileName, 'I');
+    } catch (Exception $e) {
+        die("Erreur lors de la génération du PDF : " . $e->getMessage());
+    }
+    exit;
+} else {
+    die("Erreur : Requête invalide !");
+}
 
-    $filePath = "pdfs/reservation_" . time() . ".pdf";  // Exemple de dossier où le fichier est enregistré
-
-    // Enregistrer le PDF sur le serveur
-    file_put_contents($filePath, $pdfOutput);
-
-    // Retourner l'URL du fichier PDF dans la réponse JSON
-    echo json_encode(["file" => $filePath]);
-// }
 ?>

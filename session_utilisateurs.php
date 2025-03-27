@@ -3,29 +3,23 @@
     require('inc/db_config.php');
     adminLogin();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-    <?php require_once('inc/links.php'); ?>
-
-	<title>Magic City | rapports</title>
+	<?php require_once('inc/links.php'); ?>
+	<title>Magic City | Session Utilisateurs</title>
 </head>
-
+<style>
+	.text-s {
+		font-size: 15px;
+	}
+</style>
 <body>
+
 	<?php
-		// $count_clients = mysqli_fetch_assoc(mysqli_query($con,"SELECT COUNT(id) AS `count` 
-        // FROM `clients`"));
-		
-		// $count_clients_simple = mysqli_fetch_assoc(mysqli_query($con,"SELECT COUNT(id) AS `count` 
-        // FROM `clients` WHERE `type`='Anniverssaire'"));
-		
-		// $count_clients_org = mysqli_fetch_assoc(mysqli_query($con,"SELECT COUNT(id) AS `count` 
-        // FROM `clients` WHERE `type`='Autres'"));
 
 		$count_dob = mysqli_fetch_assoc(mysqli_query($con, "SELECT 
 		COUNT(*) AS count FROM clients 
@@ -34,6 +28,7 @@
 		DAYOFYEAR(DATE_ADD(CURDATE(), INTERVAL 2 DAY)), 
 		DAYOFYEAR(DATE_ADD(CURDATE(), INTERVAL 3 DAY))
 		)"));
+
 	?>
 
 	<!-- SIDEBAR -->
@@ -60,18 +55,12 @@
 					<span class="text">Réservations</span>
 				</a>
 			</li>
-			<?php
-				if($_SESSION['type'] == "utilisateur"){
-					echo "";
-				}else{
-					echo "<li>
-						<a href='plats_boissons.php'>
-							<i class='bx bx-food-menu'></i>
-							<span class='text'>Plats et Boissons</span>
-						</a>
-					</li>";
-				}
-			?>
+			<li>
+				<a href="plats_boissons.php">
+					<i class='bx bx-food-menu'></i>
+					<span class="text">Plats et Boissons</span>
+				</a>
+			</li>
 			<li>
 				<a href="packages.php">
 					<i class='bx bxs-package'></i>
@@ -82,19 +71,21 @@
 				if($_SESSION['type'] == "utilisateur"){
 					echo "";
 				}else{
-					echo "<li class='active'>
+					echo "
+					<li>
 						<a href='rapports.php'>
 							<i class='bx bx-spreadsheet' ></i>
 							<span class='text'>Rapports</span>
 						</a>
 					</li>
+					
 					<li>
 						<a href='utilisateurs.php'>
 							<i class='bx bxs-group' ></i>
 							<span class='text'>Utilisateurs</span>
 						</a>
 					</li>
-					<li>
+					<li class='active'>
 						<a href='session_utilisateurs.php'>
 							<i class='bx bxs-time-five' ></i>
 							<span class='text'>Journal des Connexions</span>
@@ -102,7 +93,6 @@
 					</li>";
 				}
 			?>
-		</ul>
 	</section>
 	<!-- SIDEBAR -->
 
@@ -137,93 +127,74 @@
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Rapports</h1>
+					<h1>Journal des Connexions</h1>
 					<ul class="breadcrumb">
 						<li>
 							<a href="dashboard.php">Tableau de bord</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
 						<li>
-							<a class="active" href="rapports.php">Rapports</a>
+							<a class="active" href="session_utilisateurs.php">Journal des Connexions</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 
-			<div class="table-data">
+			<div class="table-data" style="min-height: 470px;">
 				<div class="order">
-					<h3>Liste des Rapports</h3><hr>
-					<div class="head">
-						<button type="button" class="btn btn-dark shadow-none btn-sm" data-bs-toggle="modal" data-bs-target="#add_rapports">
-							<i class="bi bi-plus-square m-1"></i>Generer Rapport
-						</button>
-						<input type="text" oninput="get_all_rapports(this.value)" class="form-control shadow-none w-25 ms-auto" placeholder="Rechercher rapport ici...">
-					</div>
+					<h3>Liste des Connexions</h3><hr>
 					<div class="card border-0 shadow-sm mb-4">
                         <div class="card-body">
+                            <div class="head mb-4">
+								<input type="text" oninput="get_all_session_utilisateurs(this.value)" class="form-control shadow-none w-25 ms-auto" placeholder="Rechercher une Connexion ici...">
+								<div class="col-md-1.5">
+									<select id="filter-search" name="filter" class="selectpicker z-index-1 form-select form-control shadow-none" onchange="applyFilter()">
+										<option value="jour">Aujourd'hui</option>
+										<option value="semaine">Cette semaine</option>
+										<option value="mois">Ce mois-ci</option>
+										<option value="annee">Cette année</option>
+										<option value="admin">Admin</option>
+										<option value="utilisateur">Utilisateur</option>
+										<option value="tous">Tous</option>
+									</select>
+								</div>
+                            </div>
                             <div class="table-responsive">
-                                <table class="table table-hover border text-center">
+                                <table class="table table-hover border">
                                     <thead>
-                                        <tr class="bg-dark">
-											<th scope="col" class="bg-dark text-light">#</th>
-											<th scope="col" class="bg-dark text-light">Date de début</th>
-											<th scope="col" class="bg-dark text-light">Date de fin</th>
-											<th scope="col" class="bg-dark text-light">Date du rapport</th>
-											<th scope="col" class="bg-dark text-light">Actions</th>
+                                        <tr class="bg-dark text-center text-s">
+                                            <th scope="col" class="bg-dark text-light">#</th>
+                                            <th scope="col" class="bg-dark text-light">Nom d'utilisateurs</th>
+                                            <th scope="col" class="bg-dark text-light">Heure de Connexion</th>
+                                            <th scope="col" class="bg-dark text-light">Heure de Deconnexion</th>
+                                            <th scope="col" class="bg-dark text-light">Statut</th>
+                                            <th scope="col" class="bg-dark text-light">Role</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="rapports-data">
+                                    <tbody id="session_utilisateurs-data">
                                     </tbody>
                                 </table>
                             </div>
 
                         </div>
-                    </div>
-				</div>
+                    </div></div>
 			</div>
 		</main>
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
 
-	<!-- Add rapport Modal -->
-	<div class="modal fade" id="add_rapports" data-bs-backdrop="static" aria-hidden="true">
-		<div class="modal-dialog modal-lg ">
-			<form id="add_rapports_form" autocomplete="off">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Generer rapport</h5>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-6 d-flex">
-								<label class="form-label fw-bold me-3">DU</label>
-								<input type="date" name="date_debut" class="form-control shadow-none">
-							</div>
-							<div class="col-md-6 d-flex">
-								<label class="form-label fw-bold me-3">AU</label>
-								<input type="date" name="date_fin" class="form-control shadow-none">
-							</div>
-						</div>
-						
-					</div>
-					<div class="modal-footer">
-						<button type="reset" class="btn btn-secondary shadow-none" data-bs-dismiss="modal">ANNULER</button>
-						<button type="submit" class="btn btn-primary shadow-none">ENVOYER</button>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-
-
 	<script src="js/scripts.js"></script>
-	<script src="scripts/rapports.js"></script>
-
+	<script src="scripts/session_utilisateurs.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-		crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+		crossorigin="anonymous">
+	</script>
+		
+	<!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap Select JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
 
 </body>
 

@@ -83,9 +83,35 @@
                         $_SESSION['adminId'] = $row['id'];
                         $_SESSION['nom'] = $row['nom'];
                         $_SESSION['type'] = $row['type'];
-        
-                        header("Location: dashboard.php");
-                        exit();
+
+                        $date_now = date("Y-m-d H:i:s");
+                        $date_connexion = date("Y-m-d");
+
+                        $session_exist = select("SELECT * FROM `sessions_utilisateurs` WHERE `utilisateur_id`=? AND DATE(`heure_connexion`)=? LIMIT 1",
+                        [$row['id'],$date_connexion],"ss");
+                        
+                        if ($session_exist && $session_exist->num_rows > 0) {
+                            $session_exist_fetch = $session_exist->fetch_assoc();
+                            
+                            $update_result = update("UPDATE `sessions_utilisateurs` SET `heure_deconnexion`=?, `statut` = ? WHERE `utilisateur_id`=? AND Date(`heure_connexion`)=?", 
+                                ["-", "En Ligne", $session_exist_fetch['utilisateur_id'], $date_connexion], "ssis");
+                            
+                            if ($update_result) {
+                                $_SESSION['date_connexion'] = $session_exist_fetch['heure_connexion'];
+                                header("Location: dashboard.php");
+                                exit();
+                            }
+                        } else {
+                            $insert_result = insert("INSERT INTO `sessions_utilisateurs` (utilisateur_id, heure_connexion, statut) VALUES (?, ?, ?)", 
+                                [$row['id'], $date_now, "En Ligne"], "sss");
+                            
+                            if ($insert_result) {
+                                $_SESSION['date_connexion'] = $session_exist_fetch['heure_connexion'];
+                                header("Location: dashboard.php");
+                                exit();
+                            }
+                        }
+                        
                     }
                 } else {
                     echo"<script>alert('Erreur de connexion - mot de passe incorrect !')</script>";

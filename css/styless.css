@@ -304,6 +304,11 @@ body {
 #content nav #switch-mode:checked + .switch-mode::before {
 	left: calc(100% - (25px - 4px) - 2px);
 }
+#content nav .time{
+	font-size: 20px;
+	color: red;
+	margin-right: 50px;
+}
 /* NAVBAR */
 
 

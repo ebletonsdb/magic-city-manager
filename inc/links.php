@@ -10,4 +10,28 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/css/bootstrap-select.min.css">
 <!-- My CSS -->
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/styless.css">
+<link rel="icon" type="image/png" href="img/logo.png">
+
+<script>
+function updateCurrentTime() {
+    let timeElement = document.getElementById("current-time");
+
+    let now = new Date();
+
+    let formattedTime = now.toLocaleString("fr-FR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    });
+
+    timeElement.innerText = formattedTime;
+}
+
+setInterval(updateCurrentTime, 1000);
+
+window.onload = updateCurrentTime;
+</script>

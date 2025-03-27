@@ -73,33 +73,27 @@ function print_rapports(id) {
         formData.append('print_rapports', '');
 
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/rapports_crud.php", true);
+        xhr.open("POST", "ajax/print_rapports_crud.php", true);
         xhr.responseType = "blob"; 
         
         xhr.onload = function () {
             if (xhr.status === 200) {
-                let contentDisposition = xhr.getResponseHeader('Content-Disposition');
-                let filename = "rapport_";
-                let rapportName = contentDisposition.match(/filename="([^"]+)"/);
-                if (rapportName && rapportName[1]) {
-                    filename += rapportName[1];
-                }
-                filename += ".pdf";
-
                 let blob = xhr.response;
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement("a");
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                let url = URL.createObjectURL(blob);
+                window.open(url); 
+                URL.revokeObjectURL(url);
+
                 alert('success', 'PDF généré avec succès!');
                 get_all_rapports();
             } else {
-                alert("Erreur lors de la génération du PDF !");
+                alert("error","Erreur lors de la génération du PDF !");
             }
         };
+
+        xhr.onerror = function () {
+            alert("error","Une erreur réseau s'est produite.");
+        };
+
         xhr.send(formData);
     }
 }

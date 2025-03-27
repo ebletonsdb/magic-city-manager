@@ -29,7 +29,7 @@ function add_plats(){
         } else {
             alert('success', 'Nouveau Plats Ajouter!');
             plats_form.reset();
-            get_plats();
+            get_all_plats();
         }
     }
     xhr.send(data);
@@ -100,24 +100,28 @@ function save_edit_plats(){
     xhr.send(data);
 }
 
-function remove_plats(val){
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "ajax/plats_boissons_crud.php", true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+function remove_plats(id){
+    if(confirm("Voulez-vous Vraiment supprimer cet Plat?")){
+        let data = new FormData();
+        data.append('id', id);
+        data.append('remove_plat', '1');
 
-    xhr.onload = function() {
-        if(this.responseText == 'package_added'){
-            alert('error', 'Le plat est dans une package!');
-        }else if(this.responseText == 1){
-            alert('success', 'Plat supprimer!');
-            get_all_utilisateurs();
-        }else{
-            alert('error', 'Erreur de suppression!');
-        }
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "ajax/plats_boissons_crud.php", true);
+
+        xhr.onload = function() {
+            let response = this.responseText.trim();
+            if(this.responseText == 'package_added'){
+                alert('error', 'Le plat est inclus dans un package !');
+            }else if(this.responseText == 1){
+                alert('success', 'Plat supprimé !');
+                get_all_plats();
+            }else{
+                alert('error', 'Erreur de suppression !');
+            }
+        };
+        xhr.send(data);
     }
-
-    xhr.send('remove_plats= ' + val);
-    
 }
 
 // Boissons
@@ -145,7 +149,7 @@ function add_boissons(){
         } else {
             alert('success', 'Nouveau Boisson Ajouter!');
             boissons_form.reset();
-            get_boissons();
+            get_all_boissons();
         }
     }
 
@@ -206,7 +210,7 @@ function save_edit_boissons(){
         if(this.responseText == 1){
             alert('success', 'plat Modifier!');
             edit_boissons_form.reset();
-            get_all_plats();
+            get_all_boissons();
         }else{
             alert('error', 'Erreur Server!');
             console.log(this.responseText);
@@ -227,7 +231,7 @@ function remove_boissons(val){
             alert('error', 'Cette boisson est dans une package!');
         }else if(this.responseText == 1){
             alert('success', 'Boisson supprimer!');
-            get_all_utilisateurs();
+            get_all_boissons();
         }else{
             alert('error', 'Erreur de suppression!');
         }

@@ -46,9 +46,9 @@
             while($row = mysqli_fetch_assoc($res)){
 
                 $id = htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8'); 
-                $type = htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8'); 
-                $nom = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8'); 
-                $addresse = htmlspecialchars($row['addresse'], ENT_QUOTES, 'UTF-8'); 
+                $type = ucwords(htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8')); 
+                $nom = ucwords(htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8')); 
+                $addresse = ucwords(htmlspecialchars($row['addresse'], ENT_QUOTES, 'UTF-8')); 
                 $phone = htmlspecialchars($row['phone'], ENT_QUOTES, 'UTF-8'); 
                 $dob = htmlspecialchars($row['dob'], ENT_QUOTES, 'UTF-8'); 
                 $date = date("Y-m-d", strtotime($row["datetime"]));
