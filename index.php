@@ -94,7 +94,7 @@
                             $session_exist_fetch = $session_exist->fetch_assoc();
                             
                             $update_result = update("UPDATE `sessions_utilisateurs` SET `heure_deconnexion`=?, `statut` = ? WHERE `utilisateur_id`=? AND Date(`heure_connexion`)=?", 
-                                ["-", "En Ligne", $session_exist_fetch['utilisateur_id'], $date_connexion], "ssis");
+                                [null, "En Ligne", $session_exist_fetch['utilisateur_id'], $date_connexion], "ssis");
                             
                             if ($update_result) {
                                 $_SESSION['date_connexion'] = $session_exist_fetch['heure_connexion'];
