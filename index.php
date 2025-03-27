@@ -2,12 +2,7 @@
     ob_start();
     require('inc/essentials.php');
     require('inc/db_config.php');
-
-    session_start();
-    if((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin']==true)){
-        header("Location: dashboard.php");
-	exit();
-    }
+    adminLogin();
 ?>
 
 <!DOCTYPE html>
