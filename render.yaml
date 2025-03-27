@@ -1,0 +1,17 @@
+services:
+  - name: php-app
+    type: web
+    env: docker
+    repo: https://github.com/ton-compte/ton-repo
+    branch: main
+    plan: free
+    envVars:
+      - key: DB_HOST
+        value: "ton-hôte-mysql"
+      - key: DB_USER
+        value: "ton-utilisateur-mysql"
+      - key: DB_PASS
+        value: "ton-mot-de-passe-mysql"
+      - key: DB_NAME
+        value: "ton-nom-de-base"
+    region: oregon

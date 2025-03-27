@@ -6,7 +6,7 @@
 
     require('../inc/db_config.php');
     require('../inc/essentials.php'); 
-    require(__DIR__ . '/../inc/vendor/autoload.php');
+    require('../inc/vendor/autoload.php');
 
     use Spipu\Html2Pdf\Html2Pdf;
 
