@@ -194,11 +194,10 @@
                                         <tr class="bg-dark">
                                             <th scope="col" class="bg-dark text-light">#</th>
                                             <th scope="col" class="bg-dark text-light">Nom d'utilisateurs</th>
-                                            <th scope="col" class="bg-dark text-light">Type</th>
+                                            <th scope="col" class="bg-dark text-light">Rôle</th>
                                             <th scope="col" class="bg-dark text-light">Email</th>
                                             <th scope="col" class="bg-dark text-light">Addresse</th>
                                             <th scope="col" class="bg-dark text-light">Phone</th>
-                                            <!-- <th scope="col" class="bg-dark text-light">verifier</th> -->
                                             <th scope="col" class="bg-dark text-light">Statut</th>
                                             <th scope="col" class="bg-dark text-light">Date</th> 
                                             <th scope="col" class="bg-dark text-light">Action</th>
@@ -230,32 +229,32 @@
 				<div class="container-fluid">
 					<div class="row">
 					<div class="col-md-6 mb-3">
-						<label for="select-search" class="form-label">Type de Compte :</label>
+						<label for="select-search" class="form-label">Rôle</label>
 						<select id="select-search" name="type" class="selectpicker form-select form-control shadow-none" data-live-search="true">
 							<option value="" disabled selected>Choisir un Type</option>
-							<option value="admin">Admin</option>
-							<option value="utilisateur">Utilisateur</option>
+							<option value="Admin">Admin</option>
+							<option value="Utilisateur">Utilisateur</option>
 						</select>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Nom Utilisateur</label>
-						<input name="nom" type="text" class="form-control shadow-none" placeholder="Saisir le nom ici..." required>
+						<input name="nom" type="text" class="form-control shadow-none" placeholder="Entrer le nom ici..." required>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Email</label>
-						<input name="email" type="email" class="form-control shadow-none" placeholder="Saisir l'E-mail ici..." required required autocomplete="username">
+						<input name="email" type="email" class="form-control shadow-none" placeholder="Entrer l'E-mail ici..." required required autocomplete="username">
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Addresse</label>						
-						<input name="addresse" type="text" class="form-control shadow-none" placeholder="Saisir l'adresse ici..." required autocomplete="username">
+						<input name="addresse" type="text" class="form-control shadow-none" placeholder="Entrer l'adresse ici..." required autocomplete="username">
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Phone</label>
-						<input name="phone" type="number" class="form-control shadow-none" placeholder="Saisir le numero ici..." required>
+						<input name="phone" type="number" class="form-control shadow-none" placeholder="Entrer le numero ici..." required>
 					</div> 
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Mot de Passe</label>
-						<input name="mdp" type="password" class="form-control shadow-none" placeholder="Saisir le mot de passe ici..." required autocomplete="new-password">
+						<input name="mdp" type="password" class="form-control shadow-none" placeholder="Entrer le mot de passe ici..." required autocomplete="new-password">
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Confirmer Mot de Passe</label>
@@ -285,33 +284,40 @@
 				<div class="modal-body">
 				<div class="container-fluid">
 					<div class="row">
-					<div class="col-md-6 mb-3">
-						<label for="select-search" class="form-label">Type de Compte :</label>
+					<!-- <div class="col-md-6 mb-3">
+						<label for="select-search" class="form-label">Role :</label>
 						<input required type="text" name="type" class="form-control shadow-none" readonly>
+					</div> -->
+					<div class="col-md-6 mb-3">
+						<label for="role" class="form-label">Rôle</label>
+						<select name="type" id="role" class="form-control shadow-none" required>
+							<option value="admin">Admin</option>
+							<option value="utilisateur">Utilisateur</option>
+						</select>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Nom Utilisateur</label>
-						<input name="nom" type="text" class="form-control shadow-none" placeholder="Saisir le nom ici..." required>
+						<input name="nom" type="text" class="form-control shadow-none" placeholder="Entrer le nom ici..." required>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Email</label>
-						<input name="email" type="email" class="form-control shadow-none" placeholder="Saisir l'E-mail ici..." required required autocomplete="username">
+						<input name="email" type="email" class="form-control shadow-none" placeholder="Entrer l'E-mail ici..." required required autocomplete="username">
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Addresse</label>						
-						<input name="addresse" type="text" class="form-control shadow-none" placeholder="Saisir l'adresse ici..." required autocomplete="username">
+						<input name="addresse" type="text" class="form-control shadow-none" placeholder="Entrer l'adresse ici..." required autocomplete="username">
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Phone</label>
-						<input name="phone" type="number" class="form-control shadow-none" placeholder="Saisir le numero ici..." required>
+						<input name="phone" type="number" class="form-control shadow-none" placeholder="Entrer le numero ici..." required>
 					</div> 
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Mot de Passe</label>
-						<input name="mdp" type="password" class="form-control shadow-none" placeholder="Saisir le mot de passe ici..." required autocomplete="new-password">
+						<input name="mdp" type="password" class="form-control shadow-none" placeholder="Entrer le nouveau mot de passe " autocomplete="new-password">
 					</div>
 					<div class="col-md-6 mb-3">
 						<label class="form-label">Confirmer Mot de Passe</label>
-						<input name="cmdp" type="password" class="form-control shadow-none" placeholder="Confirmer le mot de passe ici..." required autocomplete="new-password">
+						<input name="cmdp" type="password" class="form-control shadow-none" placeholder="Confirmer le nouveau mot de passe" autocomplete="new-password">
 					</div> 
 					<input type="hidden" name="id">
 					</div>
@@ -328,7 +334,7 @@
 
 
 	<script src="js/scripts.js"></script>
-	<script src="scripts/utilisateurss.js"></script>
+	<script src="scripts/utilisateurs.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous">

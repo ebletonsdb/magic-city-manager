@@ -3,7 +3,7 @@ let edit_utilisateurs_form = document.getElementById("edit_utilisateurs_form");
 
 add_utilisateurs_form.addEventListener('submit', (e)=>{
     e.preventDefault();
-    add_utilisateurs();
+    add_utilisateurs(); 
 });
 
 function add_utilisateurs(){
@@ -106,12 +106,13 @@ function edit_utilisateurs(id){
         let data = JSON.parse(this.responseText);
         if (data.utilisateursdata) {
             edit_utilisateurs_form.elements['type'].value = data.utilisateursdata.type;
+            document.querySelector("#role").value = data.utilisateursdata.type;
             edit_utilisateurs_form.elements['nom'].value = data.utilisateursdata.nom;
             edit_utilisateurs_form.elements['email'].value = data.utilisateursdata.email;
             edit_utilisateurs_form.elements['addresse'].value = data.utilisateursdata.addresse;
             edit_utilisateurs_form.elements['phone'].value = data.utilisateursdata.phone;
-            edit_utilisateurs_form.elements['mdp'].value = data.utilisateursdata.mdp;
-            edit_utilisateurs_form.elements['cmdp'].value = data.utilisateursdata.mdp;
+            // edit_utilisateurs_form.elements['mdp'].value = data.utilisateursdata.mdp;
+            // edit_utilisateurs_form.elements['cmdp'].value = data.utilisateursdata.mdp;
             edit_utilisateurs_form.elements['id'].value = data.utilisateursdata.id;
         } else {
             console.error("les donnees d'utilisateur ne sont pas disponible");
@@ -156,7 +157,7 @@ function save_edit_utilisateurs(){
             edit_utilisateurs_form.reset();
             get_all_utilisateurs();
         }else{
-            alert('error', 'Erreur Server!');
+            // alert('error', 'Erreur Server!');
             console.log(this.responseText);
         }
 

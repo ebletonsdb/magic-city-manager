@@ -57,8 +57,8 @@
             while($row = mysqli_fetch_assoc($res)){
 
                 $id = htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8'); 
-                $type = htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8'); 
-                $nom = htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8'); 
+                $type = ucwords(htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8')); 
+                $nom = ucwords(htmlspecialchars($row['nom'], ENT_QUOTES, 'UTF-8')); 
                 $addresse = htmlspecialchars($row['addresse'], ENT_QUOTES, 'UTF-8'); 
                 $phone = htmlspecialchars($row['phone'], ENT_QUOTES, 'UTF-8'); 
                 $email = htmlspecialchars($row['email'], ENT_QUOTES, 'UTF-8'); 
@@ -152,20 +152,28 @@
         $row_check_phone = mysqli_fetch_assoc($res_check_phone);
         
         if($frm_data['mdp'] != $frm_data['cmdp']){
-            echo("mdp_dif");
+            echo("mdp_dif"); 
         }else{
             if ($row_check_email['count'] > 0) {
                 echo "email_existe";
             } elseif ($row_check_phone['count'] > 0) {
                 echo "phone_existe";
             } else {
-                $enc_mdp = password_hash($frm_data['cmdp'], PASSWORD_BCRYPT);
+                if(empty($frm_data['mdp']) && empty($frm_data['cmdp'])){
+                    $q = "UPDATE `utilisateurs` SET `type`=?, `nom`=?, `email`=?, `addresse`=?,`phone`=? WHERE `id`=?";
+                    $values = [$frm_data['type'], $frm_data['nom'], $frm_data['email'], $frm_data['addresse'], $frm_data['phone'], $frm_data['id']];
+                
+                    $res = update($q, $values, 'sssssi');
+                    echo $res;
+                }else{
+                    $enc_mdp = password_hash($frm_data['cmdp'], PASSWORD_BCRYPT);
+                    $q = "UPDATE `utilisateurs` SET `type`=?, `nom`=?, `email`=?, `addresse`=?,`phone`=?,`mdp`=? WHERE `id`=?";
+                    $values = [$frm_data['type'], $frm_data['nom'], $frm_data['email'], $frm_data['addresse'], $frm_data['phone'], $enc_mdp, $frm_data['id']];
+                
+                    $res = update($q, $values, 'ssssssi');
+                    echo $res;
+                }
 
-                $q = "UPDATE `utilisateurs` SET `type`=?, `nom`=?, `email`=?, `addresse`=?,`phone`=?,`mdp`=? WHERE `id`=?";
-                $values = [$frm_data['type'], $frm_data['nom'], $frm_data['email'], $frm_data['addresse'], $frm_data['phone'], $enc_mdp, $frm_data['id']];
-            
-                $res = update($q, $values, 'ssssssi');
-                echo $res;
             }
         }
     }
