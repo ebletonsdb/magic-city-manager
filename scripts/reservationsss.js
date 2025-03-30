@@ -134,7 +134,7 @@ function print_reservations(id) {
         formData.append('print_reservations', '');
 
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/print_reservations_crud.php", true);
+        xhr.open("POST", "ajax/print_reservations_crud1.php", true);
         xhr.responseType = "blob"; 
         
         xhr.onload = function () {

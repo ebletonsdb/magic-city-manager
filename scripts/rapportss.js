@@ -73,7 +73,7 @@ function print_rapports(id) {
         formData.append('print_rapports', '');
 
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "ajax/print_rapports_crud.php", true);
+        xhr.open("POST", "ajax/print_rapports_crud1.php", true);
         xhr.responseType = "blob"; 
         
         xhr.onload = function () {

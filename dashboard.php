@@ -192,7 +192,7 @@
 			<div class="table-data">
 				<div class="order">
 					<div class="head">
-						<h3>Dix(10) dernier Reservation</h3>
+						<h3>Nouveau Reservation</h3>
 					</div><hr>
 					<table>
 						<thead>
@@ -231,7 +231,7 @@
 				</div>
 				<div class="todo">
 					<div class="head">
-						<h3>Anniverssaires dans quelques jours</h3>
+						<h3>Anniverssaires</h3>
 					</div>
 					<hr>
 					<ul class="todo-list">
@@ -245,7 +245,7 @@
 									<li class='completed'>
 										<p class='text-center'>$nom</p>
 										<P>Nee : $dob</P>
-										<P>Anniverssaire : <br>$anniverssaire</P>
+										<P>Anniverssaire : $anniverssaire</P>
 									</li>
 								";
 							}
