@@ -1,9 +1,10 @@
 <?php
     
-    $host_name = "localhost";
-    $user_name = "root";
-    $pass = "";
-    $db = "db_mc";
+    
+    $host_name = getenv('DB_HOST');
+    $user_name = getenv('DB_USER');
+    $pass = getenv('DB_PASS');
+    $db = getenv('DB_NAME');
     
     $con = mysqli_connect($host_name, $user_name, $pass, $db);
     
