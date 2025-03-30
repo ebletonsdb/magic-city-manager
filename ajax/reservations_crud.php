@@ -1,14 +1,5 @@
 <?php
 
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-
-
-    require '../inc/vendor/autoload.php';
-    use Dompdf\Dompdf;
-    use Dompdf\Options;
-
     require('../inc/db_config.php');
     require('../inc/essentials.php');
     adminLogin();  
