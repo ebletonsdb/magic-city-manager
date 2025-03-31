@@ -2,8 +2,15 @@
     require('../inc/db_config.php');
     require('../inc/essentials.php');
     require_once __DIR__ . '/../inc/tcpdf/tcpdf.php';
-var_dump(realpath('../inc/TCPDF/tcpdf.php'));
-exit;
+
+    $filePath = __DIR__ . '/../inc/tcpdf/tcpdf.php';
+
+    if (!file_exists($filePath)) {
+        die("Fichier introuvable : " . $filePath);
+    } else {
+        echo "Fichier trouvé à : " . $filePath;
+        exit;
+    }
 
 
     adminLogin();
