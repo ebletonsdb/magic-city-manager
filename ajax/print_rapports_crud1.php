@@ -1,7 +1,7 @@
 <?php
     require('../inc/db_config.php');
     require('../inc/essentials.php');
-    require('../inc/TCPDF/tcpdf.php'); 
+    require('../inc/tcpdf/tcpdf.php'); 
 
     adminLogin();
 
