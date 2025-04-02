@@ -2,7 +2,7 @@
 
 require('../inc/db_config.php');
 require('../inc/essentials.php');
-require('\magiccitymanager\inc\TCPDF\tcpdf.php');
+require('TCPDF\tcpdf.php');
 adminLogin();
 
 if (isset($_POST['print_reservations'])) {
