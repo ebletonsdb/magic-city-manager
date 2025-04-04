@@ -145,7 +145,7 @@
 					<h3>Liste des Connexions</h3><hr>
 					<div class="card border-0 shadow-sm mb-4">
                         <div class="card-body">
-                            <div class="head mb-4">
+                            <div class="head mb-4 d-flex">
 								<input type="text" oninput="get_all_session_utilisateurs(this.value)" class="form-control shadow-none w-25 ms-auto" placeholder="Rechercher une Connexion ici...">
 								<div class="col-md-1.5">
 									<select id="filter-search" name="filter" class="selectpicker z-index-1 form-select form-control shadow-none" onchange="applyFilter()">
