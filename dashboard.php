@@ -182,7 +182,6 @@
 					<i class='bx bxs-dollar-circle' ></i>
 					<span class="text">
 						<h3><?= $somme_montant['somme']?> HTG</h3>
-<!-- 						<h6><?= //$somme_montant['somme'] / 5?> dollars HT</h6> -->
 						<p>Solde Total</p>
 					</span>
 				</li>
