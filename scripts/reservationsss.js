@@ -15,6 +15,7 @@ function add_reservations(){
     data.append('heure_r', add_reservations_form.elements['heure_r'].value);
     data.append('montant', add_reservations_form.elements['montant'].value);
     data.append('versement', add_reservations_form.elements['versement'].value);
+    data.append('f_reservation', add_reservations_form.elements['f_reservation'].value);
     
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "ajax/reservations_crud.php", true);
