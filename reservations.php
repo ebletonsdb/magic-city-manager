@@ -274,6 +274,10 @@
 								<input required type="number" id="montant" name="montant" class="form-control shadow-none" readonly placeholder="000.00 gourde">
 							</div>
 							<div class="col-md-6 mb-3">
+								<label class="form-label fw-bold">Frais reservation</label>
+								<input required type="number" name="f_reservation" class="form-control shadow-none" placeholder="000.00 gourde">
+							</div>
+							<div class="col-md-12 mb-3">
 								<label class="form-label fw-bold">Versement en gourde</label>
 								<input required type="number" name="versement" class="form-control shadow-none" placeholder="000.00 gourde">
 							</div>
