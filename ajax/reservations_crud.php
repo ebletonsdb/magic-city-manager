@@ -6,28 +6,34 @@
 
     // add reservations
 
-    if(isset($_POST['add_reservations'])){
+    if (isset($_POST['add_reservations'])) {
         $frm_data = filteration($_POST);
-
-        $balance = $frm_data['montant'] - $frm_data['versement'];
-        $date_aujourdhui = date("d-m-Y");
-
+    
+        $frais_reservation = $frm_data['f_reservation']; // On utilise juste pour le calcul
+        $montant_brut = $frm_data['montant'];
+        $versement = $frm_data['versement'];
+    
+        $montant_total = $montant_brut + $frais_reservation; // Montant total réel
+        $balance = $montant_total - $versement;
+    
+        $date_aujourdhui = date("Y-m-d"); // format standard
+    
+        // Statut en fonction du montant versé et de la date
         $statut = "";
-        if($frm_data['montant'] > $frm_data['versement']){
+        if ($versement < $montant_total) {
             $statut = "En attente";
-        }elseif(($frm_data['montant'] = $frm_data['versement'])){
+        } elseif ($versement == $montant_total) {
             $statut = "En cours";
-        }elseif (strtotime($frm_data['date_r']) < strtotime($date_aujourdhui)) {
-            $statut = "Terminer";
         }
-
+    
+        // Vérifier que la date de réservation est valide
         if (strtotime($frm_data['date_r']) < strtotime($date_aujourdhui)) {
             echo "date Reservation non valider";
             exit;
-        }else{
-            $date_r = date("d-m-Y", strtotime($frm_data["date_r"]));
-            $query = "INSERT INTO `reservations`(`client`, `package`, `statut`, `montant`, `versement`, `balance`, `date_r`, `heure_r`) VALUES (?,?,?,?,?,?,?,?)";
-            $values = [$frm_data['nomclient'], $frm_data['package'], $statut, $frm_data['montant'], $frm_data['versement'], $balance, $frm_data["date_r"], $frm_data['heure_r']];
+        } else {
+            $query = "INSERT INTO `reservations`(`client`, `package`, `statut`, `montant`, `versement`, `balance`, `date_r`, `heure_r`) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $values = [$frm_data['nomclient'],$frm_data['package'],$statut,$montant_total,$versement,$balance,$frm_data["date_r"],$frm_data['heure_r']];
             $res = insert($query, $values, 'ssssssss');
             echo $res;
             exit;
